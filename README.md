@@ -1,6 +1,8 @@
 # BusHopper
+
 GOALS:
-main menu
+
+1. main menu
 	- search by stop number or name
 	- find stops near me
 	- OC Transpo RSS feed
@@ -11,13 +13,13 @@ main menu
 		- off-line mode
 		- good/bad internet mode
 		- enable notifications to phone from RSS
-bus selection screen
+2. bus selection screen
 	- back button
 	- favourite stop button
 	- multiple bus selection
-bus results screen
+3. bus results screen
 	- back button
 	- home button
 	- favourite bus(es) button
-bus stop selection screen
+4. bus stop selection screen
 	- back button
