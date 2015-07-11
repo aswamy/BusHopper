@@ -1,0 +1,36 @@
+<ion-view>
+    <div class="bar bar-header bar-assertive">
+        <button class="button icon ion-home button-clear" nav-direction="back" ui-sref="dash"></button>
+        <h1 class="title">Stop {{stopTitle}}</h1>
+        <button class="button icon ion-android-star-outline button-clear"></button>
+    </div>
+    <ion-content class="padding has-header">
+        <div class="list card">
+            <a class="item item-icon-left item-icon-right item-divider">
+                <i class="icon ion-android-bus"></i>
+                <h2>Search All Routes</h2>
+                <i class="icon ion-chevron-right"></i>
+            </a>
+            <a ng-repeat="route in routes"
+               ui-sref="result"
+               nav-direction="forward"
+               class="item item-icon-left item-icon-right">
+                <i class="icon ion-android-bus"></i>
+                <h2>{{ route.num }}</h2>
+                <p>{{ route.desc }}</p>
+                <i class="icon ion-chevron-right"></i>
+            </a>
+        </div>
+    </ion-content>
+</ion-view>
+
+
+<!--
+<div class="bar bar-header bar-assertive">
+    <h1 class="title">Select Bus</h1>
+    <button class="button icon ion-gear-a button-clear"></button>
+</div>
+<ion-content class="has-header padding">
+    <div class="button" ui-sref="dash">Dong</div>
+</ion-content>
+-->
