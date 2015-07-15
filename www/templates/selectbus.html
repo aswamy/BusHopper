@@ -4,9 +4,12 @@
         <h1 class="title">Stop {{stopTitle}}</h1>
         <button class="button icon ion-android-star-outline button-clear"></button>
     </div>
-    <ion-content class="padding has-header">
+    <ion-content has-bouncing="false" class="padding has-header">
         <div class="list card">
-            <a class="item item-icon-left item-icon-right item-divider">
+            <a class="item item-icon-left item-icon-right item-divider"
+               ui-sref="result"
+               nav-direction="forward"
+               ng-click="selectAllRoutes()">
                 <i class="icon ion-android-bus"></i>
                 <h2>Search All Routes</h2>
                 <i class="icon ion-chevron-right"></i>
@@ -14,10 +17,11 @@
             <a ng-repeat="route in routes"
                ui-sref="result"
                nav-direction="forward"
-               class="item item-icon-left item-icon-right">
+               class="item item-icon-left item-icon-right"
+               ng-click="selectRoute(route.getRouteNum(), route.getRouteDesc())" >
                 <i class="icon ion-android-bus"></i>
-                <h2>{{ route.num }}</h2>
-                <p>{{ route.desc }}</p>
+                <h2>{{ route.getRouteNum() }}</h2>
+                <p>{{ route.getRouteDesc() }}</p>
                 <i class="icon ion-chevron-right"></i>
             </a>
         </div>
