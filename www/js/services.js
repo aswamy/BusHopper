@@ -44,19 +44,45 @@ angular.module('bushopper.services', [])
                 },
             parseStopInfo :
                 function(stopInfo) {
-                    var xml = parser.parseFromString(stopInfo, "text/xml");
-                    var routes = xml.getElementsByTagName("Route");
                     var buses = [];
+                    var stopRoutes = $($.parseXML(stopInfo)).find("Route");
 
-                    for (var x = 0; x < routes.length; x++) {
+                    for (var x = 0; x < stopRoutes.length; x++) {
                         buses.push(
                             new RouteInfo(
-                                routes[x].childNodes[0].innerHTML,
-                                routes[x].childNodes[3].innerHTML
+                                $(stopRoutes[x]).find("RouteNo").text(),
+                                $(stopRoutes[x]).find("RouteHeading").text()
                             )
                         );
                     }
                     return buses;
+                },
+            parseBusInfo :
+                function(busInfo, selectedRoute) {
+                    var xml = parser.parseFromString(busInfo, "text/xml");
+                    var routes = xml.getElementsByTagName("RouteDirection");
+                    var stopRoutes = $($.parseXML(busInfo)).find("RouteDirection");
+
+                    for (var x = 0; x < stopRoutes.length; x++) {
+                        if($(stopRoutes[x]).find("RouteLabel").text() == selectedRoute.getRouteDesc()) {
+                            var availableTrips = $(stopRoutes[x]).find("Trip");
+                            var trips = [];
+
+                            for (var y = 0; y < availableTrips.length; y++) {
+                                trips.push(
+                                    new TripInfo(
+                                        selectedRoute.getRouteNum(),
+                                        $(availableTrips[y]).find("TripDestination").text(),
+                                        $(availableTrips[y]).find("AdjustedScheduleTime").text(),
+                                        $(availableTrips[y]).find("BusType").text(),
+                                        $(availableTrips[y]).find("GPSSpeed").text().length > 0
+                                    )
+                                );
+                            }
+                            return trips;
+                        }
+                    }
+                    return [];
                 }
         }
     })
@@ -83,6 +109,9 @@ angular.module('bushopper.services', [])
                     template: msg,
                     okType: 'button-assertive'
                 }).then(cb);
+            },
+            displayOCError: function(cb) {
+                this.displayError("Cannot connect to OCTranspo Server", "Check your internet connection. If you are connected, OCTranspo API might be down.", cb);
             },
             displayLoading: function() {
                 $ionicLoading.show({ templateUrl: 'templates/misc/loading.html'});

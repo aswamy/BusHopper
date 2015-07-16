@@ -1,15 +1,23 @@
 <ion-view>
     <div class="bar bar-header bar-assertive">
         <button class="button icon ion-home button-clear" nav-direction="back" ui-sref="dash"></button>
-        <h1 class="title">Stop {{stopTitle}}</h1>
+        <h1 class="title">Stop {{stopTitle}} : {{routeTitle}}</h1>
         <button class="button icon ion-android-star-outline button-clear"></button>
     </div>
-    <ion-content class="padding has-header">
+    <ion-content has-bouncing="false" class="padding has-header">
         <div class="button-bar">
             <a nav-direction="back" ui-sref="selectbus" class="button icon ion-chevron-left button-clear"></a>
-            <a class="button icon ion-refresh button-clear"></a>
+            <a class="button icon ion-refresh button-clear" ng-click="updateContent()"></a>
             <a class="button icon ion-android-alarm-clock button-clear"></a>
         </div>
-
+        <div class="card">
+            <a ng-repeat="trip in availableTrips"
+               class="item item-icon-left item-icon-right" >
+                <i class="icon ion-android-bus"></i>
+                <h2>{{ trip.busNum }} - {{ trip.busDesc }}</h2>
+                <p>{{ trip.busTime }} minutes</p>
+                <i ng-class="{'ion-android-time' : !trip.isGps, 'ion-android-locate' : trip.isGps}" class="icon"></i>
+            </a>
+        </div>
     </ion-content>
 </ion-view>

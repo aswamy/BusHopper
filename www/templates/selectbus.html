@@ -14,7 +14,7 @@
                 <h2>Search All Routes</h2>
                 <i class="icon ion-chevron-right"></i>
             </a>
-            <a ng-repeat="route in routes"
+            <a ng-repeat="route in availableRoutes"
                ui-sref="result"
                nav-direction="forward"
                class="item item-icon-left item-icon-right"
@@ -27,14 +27,3 @@
         </div>
     </ion-content>
 </ion-view>
-
-
-<!--
-<div class="bar bar-header bar-assertive">
-    <h1 class="title">Select Bus</h1>
-    <button class="button icon ion-gear-a button-clear"></button>
-</div>
-<ion-content class="has-header padding">
-    <div class="button" ui-sref="dash">Dong</div>
-</ion-content>
--->

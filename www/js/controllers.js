@@ -17,20 +17,20 @@ angular.module('bushopper.controllers', [])
         var currStop = '';
 
         $scope.stopTitle = '';
-        $scope.routes = [];
+        $scope.availableRoutes = [];
 
         $scope.updateContent = function() {
             Alert.displayLoading();
 
             OC.getStopInfo(currStop)
                 .success(function(data, status, headers, config) {
-                    $scope.routes = OC.parseStopInfo(data);
+                    $scope.availableRoutes = OC.parseStopInfo(data);
                     Alert.hideLoading();
                     prevStop = currStop;
                 })
                 .error(function(data, status, headers, config) {
                     Alert.hideLoading();
-                    Alert.displayError("Cannot connect to OCTranspo Server", "Check your internet connection. If you are connected, OCTranspo API might be down.", returnToDash);
+                    Alert.displayError("Cannot connect to OCTranspo Server", "Check your internet connection. If you are connected, OCTranspo API might be down.", Navigation.goDashboard);
                 })
                 .then(function() {
                 })
@@ -43,16 +43,18 @@ angular.module('bushopper.controllers', [])
         };
 
         $scope.selectAllRoutes = function() {
-            StopService.setRouteInfo($scope.routes);
+            StopService.setRouteInfo($scope.availableRoutes);
             Navigation.goResults();
         };
 
         $scope.$on('$ionicView.beforeEnter', function() {
+            StopService.clearRouteInfo();
             currStop = StopService.getStop();
+
             if (typeof currStop == 'undefined' || currStop == '') {
                 Alert.displayError("ERROR: Stop Number", "Stop number cannot be empty.", Navigation.goDashboard);
             } else if (prevStop != currStop || prevStop == '') {
-                $scope.routes = [];
+                $scope.availableRoutes = [];
                 $scope.stopTitle = currStop;
                 $scope.updateContent();
             }
@@ -65,24 +67,30 @@ angular.module('bushopper.controllers', [])
         var currStop = '';
 
         $scope.stopTitle = '';
+        $scope.routeTitle = '';
+        $scope.availableTrips = [];
 
         $scope.updateContent = function() {
             Alert.displayLoading();
 
-            OC.getStopInfo(currStop)
-                .success(function(data, status, headers, config) {
-                    $scope.routes = OC.parseStopInfo(data);
-                    Alert.hideLoading();
-                    prevStop = currStop;
-                })
-                .error(function(data, status, headers, config) {
-                    Alert.hideLoading();
-                    Alert.displayError("Cannot connect to OCTranspo Server", "Check your internet connection. If you are connected, OCTranspo API might be down.", returnToDash);
-                })
-                .then(function() {
-                })
-            ;
-
+            if(currentRoutes.length == 1) {
+                $scope.routeTitle = 'Route ' + currentRoutes[0].num;
+                OC.getBusInfo(currStop, currentRoutes[0].num)
+                    .success(function(data, status, headers, config) {
+                        $scope.availableTrips = OC.parseBusInfo(data, currentRoutes[0]);
+                        Alert.hideLoading();
+                    })
+                    .error(function(data, status, headers, config) {
+                        Alert.hideLoading();
+                        Alert.displayOCError(Navigation.goDashboard);
+                    })
+                    .then(function() {
+                    })
+            } else {
+                $scope.routeTitle = 'All Routes';
+                console.log("to be implemented");
+                Alert.hideLoading();
+            }
         };
 
         $scope.$on('$ionicView.beforeEnter', function() {
