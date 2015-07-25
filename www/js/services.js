@@ -5,9 +5,8 @@ angular.module('bushopper.services', [])
         var stop = {
             num: '',
             selectedRoutes: [], // 1D array of RouteInfo
-            recentRoutes: [],   // should be 2D array of RouteInfo (atm its only 1D array)
             favoriteRouteSets: [],  // 2D array of RouteInfo
-            recentRouteSets: []     // 2D array of RouteInfo (will replace stop.recentRoutes)
+            recentRouteSets: []     // 2D array of RouteInfo
         };
 
         function isRouteSetEqual(rs1, rs2) {

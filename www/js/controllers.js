@@ -55,10 +55,10 @@ angular.module('bushopper.controllers', [])
             Navigation.goShowTrips();
         };
 
-        $scope.selectAllRoutes = function() {
-            StopService.setRouteInfo($scope.availableRoutes);
-            Navigation.goShowTrips();
-        };
+        //$scope.selectAllRoutes = function() {
+        //    StopService.setRouteInfo($scope.availableRoutes);
+        //    Navigation.goShowTrips();
+        //};
 
         $scope.$on('$ionicView.beforeEnter', function() {
             StopService.clearRouteInfo();
