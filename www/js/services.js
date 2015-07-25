@@ -1,6 +1,18 @@
 angular.module('bushopper.services', [])
 
-    .factory('StopService', function() {
+    .factory('$localstorage', ['$window', function($window) {
+        return {
+            setObject: function(key, value) {
+                $window.localStorage[key] = JSON.stringify(value);
+            },
+            getObject: function(key, defaultValue) {
+                return JSON.parse($window.localStorage[key] || defaultValue);
+            }
+        }
+    }])
+
+    .factory('StopService', function($localstorage) {
+        console.log('stop service ran');
 
         var data = {
             stopNum: '',
@@ -8,6 +20,21 @@ angular.module('bushopper.services', [])
             favoriteRouteSets: [],  // 2D array of RouteInfo
             recentRouteSets: []     // 2D array of RouteInfo
         };
+
+        function parseLocalStorage(routeSets, localData) {
+            for (var i = 0; i < localData.length; i++) {
+                routeSets.push([]);
+                for (var j = 0; j < localData[i].length; j++) {
+                    routeSets[i].push(
+                        new RouteInfo(
+                            localData[i][j].num,
+                            localData[i][j].desc,
+                            localData[i][j].stop
+                        )
+                    );
+                }
+            }
+        }
 
         function isRouteSetEqual(rs1, rs2) {
             if (rs1 == undefined || rs2 == undefined)
@@ -29,6 +56,9 @@ angular.module('bushopper.services', [])
             return false;
         }
 
+        parseLocalStorage(data.recentRouteSets, $localstorage.getObject('recentRouteSets', '[]'));
+        parseLocalStorage(data.favoriteRouteSets, $localstorage.getObject('favoriteRouteSets', '[]'));
+
         return {
             getStop: function() { return data.stopNum; },
             setStop: function(n) { data.stopNum = n; },
@@ -48,8 +78,10 @@ angular.module('bushopper.services', [])
                 while(data.recentRouteSets.length > 5) {
                     data.recentRouteSets.shift();
                 }
+                $localstorage.setObject('recentRouteSets', data.recentRouteSets);
             },
             getAllRecentRouteSets: function() { return data.recentRouteSets; },
+            setRecentRouteSets: function(rss) { data.recentRouteSets = rss; },
 
             isRouteSetFavorited: function(rs) {
                 for (var i = 0; i < data.favoriteRouteSets.length; i++) {
@@ -60,6 +92,7 @@ angular.module('bushopper.services', [])
             },
             addFavoriteRouteSet: function(rs) {
                 data.favoriteRouteSets.push(rs);
+                $localstorage.setObject('favoriteRouteSets', data.favoriteRouteSets);
             },
             removeFavoriteRouteSet: function(rs) {
                 for (var i = 0; i < data.favoriteRouteSets.length; i++) {
@@ -68,8 +101,10 @@ angular.module('bushopper.services', [])
                         break;
                     }
                 }
+                $localstorage.setObject('favoriteRouteSets', data.favoriteRouteSets);
             },
-            getAllFavoriteRouteSets: function() { return data.favoriteRouteSets; }
+            getAllFavoriteRouteSets: function() { return data.favoriteRouteSets; },
+            setFavoriteRouteSets: function(rss) { data.favoriteRouteSets = rss; }
         };
     })
 
