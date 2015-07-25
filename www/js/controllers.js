@@ -12,24 +12,12 @@ angular.module('bushopper.controllers', [])
         };
 
         $scope.$on('$ionicView.beforeEnter', function() {
-            $scope.recentRoutes = StopService.getRecentRoutes();
+            $scope.recentRouteSets = StopService.getAllRecentRouteSets();
             $scope.favoriteRouteSets = StopService.getAllFavoriteRouteSets();
-            //$scope.favoriteRouteSets = [
-            //    [
-            //        new RouteInfo('87', 'baseline', '8903'),
-            //        new RouteInfo('140', 'hurdman', '8903')
-            //    ],
-            //    [
-            //        new RouteInfo('118', 'kanata', '5602')
-            //    ],
-            //    [
-            //        new RouteInfo('93', 'lincoln fields', '8888')
-            //    ]
-            //];
         });
     })
 
-    .controller('SelectBus', function ($scope, OC, StopService, Navigation, Alert) {
+    .controller('SelectRoutes', function ($scope, OC, StopService, Navigation, Alert) {
 
         var prevStop = '';
         var currStop = '';
@@ -57,14 +45,19 @@ angular.module('bushopper.controllers', [])
 
         $scope.selectRoute = function(num, dir) {
             var rInfo = new RouteInfo(num, dir, currStop);
-            StopService.addRecentRoutes(rInfo);
+            var selectedRoutes = [];
+            selectedRoutes.push(rInfo);
+
+            // Add route to history
+            StopService.addRecentRouteSet(selectedRoutes);
+            // Add route to be passed to result page
             StopService.insertRouteInfo(rInfo);
-            Navigation.goResults();
+            Navigation.goShowTrips();
         };
 
         $scope.selectAllRoutes = function() {
             StopService.setRouteInfo($scope.availableRoutes);
-            Navigation.goResults();
+            Navigation.goShowTrips();
         };
 
         $scope.$on('$ionicView.beforeEnter', function() {
@@ -81,7 +74,7 @@ angular.module('bushopper.controllers', [])
         });
     })
 
-    .controller('Result', function ($scope, OC, StopService, Navigation, Alert) {
+    .controller('ShowTrips', function ($scope, OC, StopService, Navigation, Alert) {
 
         var currentRoutes;
         var currStop = '';

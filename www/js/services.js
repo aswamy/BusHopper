@@ -5,8 +5,9 @@ angular.module('bushopper.services', [])
         var stop = {
             num: '',
             selectedRoutes: [], // 1D array of RouteInfo
-            recentRoutes: [],   // 2D array of RouteInfo (atm its only 1D array)
-            favoriteRouteSets: []  // 2D array of RouteInfo
+            recentRoutes: [],   // should be 2D array of RouteInfo (atm its only 1D array)
+            favoriteRouteSets: [],  // 2D array of RouteInfo
+            recentRouteSets: []     // 2D array of RouteInfo (will replace stop.recentRoutes)
         };
 
         function isRouteSetEqual(rs1, rs2) {
@@ -38,13 +39,19 @@ angular.module('bushopper.services', [])
             getRouteInfo: function() { return stop.selectedRoutes },
             clearRouteInfo: function() { stop.selectedRoutes = [] },
 
-            getRecentRoutes: function() { return stop.recentRoutes },
-            addRecentRoutes: function(r) {
-                stop.recentRoutes.push(r);
-                while (stop.recentRoutes.length > 5) {
-                    stop.recentRoutes.shift();
+            addRecentRouteSet: function(rs) {
+                for (var i = 0; i < stop.recentRouteSets.length; i++) {
+                    if(isRouteSetEqual(rs, stop.recentRouteSets[i])) {
+                        stop.recentRouteSets.splice(i, 1);
+                        break;
+                    }
+                }
+                stop.recentRouteSets.push(rs);
+                while(stop.recentRouteSets.length > 5) {
+                    stop.recentRouteSets.shift();
                 }
             },
+            getAllRecentRouteSets: function() { return stop.recentRouteSets; },
 
             isRouteSetFavorited: function(rs) {
                 for (var i = 0; i < stop.favoriteRouteSets.length; i++) {
@@ -64,34 +71,7 @@ angular.module('bushopper.services', [])
                     }
                 }
             },
-            getAllFavoriteRouteSets: function() { return stop.favoriteRouteSets; },
-
-
-            getAllFavoriteRoutes: function() { return stop.favoriteRouteSets },
-            getFavoriteRoute: function(stopNum, busNum, busDesc) {
-                var rt;
-                for (var x = 0; x < stop.favoriteRouteSets; x++) {
-                    rt = stop.favoriteRouteSets[x];
-                    if( rt.num == busNum &&
-                        rt.desc == busDesc &&
-                        rt.stop == stopNum) {
-                        return rt;
-                    }
-                }
-                return null;
-            },
-            addFavoriteRoute: function(stopNum, busNum, busDesc) {
-                var rt = new RouteInfo(busNum, busDesc, stopNum);
-                stop.favoriteRouteSets.push(rt);
-                return rt;
-            },
-            removeFavoriteRoute: function(rt) {
-                for (var x = 0; x < stop.favoriteRouteSets; x++) {
-                    if(rt == stop.favoriteRouteSets[x]) {
-                        stop.favoriteRouteSets.splice(x, 1);
-                    }
-                }
-            }
+            getAllFavoriteRouteSets: function() { return stop.favoriteRouteSets; }
         };
     })
 
@@ -187,10 +167,10 @@ angular.module('bushopper.services', [])
                 $state.go('dash');
             },
             goSelectRoute : function() {
-                $state.go('selectbus');
+                $state.go('selectRoutes');
             },
-            goResults : function() {
-                $state.go('result');
+            goShowTrips : function() {
+                $state.go('showTrips');
             }
         }
     })

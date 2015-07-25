@@ -7,16 +7,12 @@
     <ion-content has-bouncing="false" class="padding has-header">
         <div class="list card">
             <a class="item item-icon-left item-icon-right item-divider"
-               ui-sref="result"
-               nav-direction="forward"
                ng-click="selectAllRoutes()">
                 <i class="icon ion-android-bus"></i>
                 <h2>Search All Routes</h2>
                 <i class="icon ion-chevron-right"></i>
             </a>
             <a ng-repeat="route in availableRoutes"
-               ui-sref="result"
-               nav-direction="forward"
                class="item item-icon-left item-icon-right"
                ng-click="selectRoute(route.getRouteNum(), route.getRouteDesc())" >
                 <i class="icon ion-android-bus"></i>

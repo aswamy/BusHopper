@@ -29,16 +29,16 @@ angular.module('bushopper', ['ionic', 'bushopper.controllers', 'bushopper.servic
                 controller: 'DashCtrl'
             })
 
-            .state('selectbus', {
-                url: '/selectbus',
-                templateUrl: 'templates/selectbus.html',
-                controller: 'SelectBus'
+            .state('selectRoutes', {
+                url: '/selectRoutes',
+                templateUrl: 'templates/selectRoutes.html',
+                controller: 'SelectRoutes'
             })
 
-            .state('result', {
-                url: '/result',
-                templateUrl: 'templates/result.html',
-                controller: 'Result'
+            .state('showTrips', {
+                url: '/showTrips',
+                templateUrl: 'templates/showTrips.html',
+                controller: 'ShowTrips'
             })
         ;
 

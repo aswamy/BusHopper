@@ -28,14 +28,19 @@
         </div>
         <div class="list">
             <div class="item item-divider">Recent Routes</div>
-            <a ng-repeat="route in recentRoutes" class="item item-icon-left">
+            <a ng-repeat="routeSet in recentRouteSets" class="item item-icon-left">
                 <i class="icon ion-android-bus"></i>
                 <span class="item-note">Stop</span>
-                <h2>{{route.num}}</h2>
-                <span class="item-note">{{route.stop}}</span>
-                <p>{{route.desc}}</p>
+                <h2>{{routeSet.join(', ')}}</h2>
+                <span class="item-note">{{routeSet[0].stop}}</span>
+                <span ng-if="routeSet.length==1">
+                    <p>{{routeSet[0].desc}}</p>
+                </span>
+                <span ng-if="routeSet.length>1">
+                    <p>Multiple routes</p>
+                </span>
             </a>
-            <a ng-if="recentRoutes.length == 0" class="item">
+            <a ng-if="recentRouteSets.length == 0" class="item">
                 <span>No recent routes</span>
             </a>
         </div>
