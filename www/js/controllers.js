@@ -12,7 +12,7 @@ angular.module('bushopper.controllers', [])
         };
 
         $scope.$on('$ionicView.beforeEnter', function() {
-            $scope.recentRouteSets = StopService.getAllRecentRouteSets();
+            $scope.recentRouteSets = StopService.getAllRecentRouteSets().slice().reverse();
             $scope.favoriteRouteSets = StopService.getAllFavoriteRouteSets();
         });
     })
