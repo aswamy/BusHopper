@@ -1,10 +1,19 @@
 <ion-view>
-    <div class="bar bar-header bar-assertive">
+    <ion-header-bar class="bar bar-header bar-assertive">
         <h1 class="title">Bus Hopper</h1>
         <button class="button icon ion-gear-a button-clear"></button>
-    </div>
-    <ion-content has-bouncing="false" class="padding has-header">
-        <div class="list">
+    </ion-header-bar>
+    <!--<ion-header-bar class="bar-subheader item item-input-inset">-->
+        <!--<label class="item-input-wrapper">-->
+            <!--<i class="icon ion-ios-search placeholder-icon"></i>-->
+            <!--<input type="search" placeholder="Bus stop name/number">-->
+        <!--</label>-->
+        <!--<button class="button button-clear">-->
+            <!--Cancel-->
+        <!--</button>-->
+    <!--</ion-header-bar>-->
+    <ion-content has-bouncing="false" class="padding has-header has-header">
+        <div>
             <div class="item item-input-inset">
                 <label class="item-input-wrapper">
                     <input type="text" placeholder="Bus stop name/number" ng-model="data.stopNum">
@@ -12,19 +21,41 @@
                 <a class="button button-icon icon ion-ios-search" ng-click="updateStop()"></a>
             </div>
         </div>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col col-50"><button class="button button-full icon-left ion-android-compass button-assertive">Find Stops</button></div>
+            <div class="col"></div>
+        </div>
+        <div class="list">
+            <div class="item item-divider">Recent Routes</div>
+            <a ng-repeat="route in recentRoutes" class="item item-icon-left">
+                <i class="icon ion-android-bus"></i>
+                <span class="item-note">Stop</span>
+                <h2>{{route.num}}</h2>
+                <span class="item-note">{{route.stop}}</span>
+                <p>{{route.desc}}</p>
+            </a>
+            <a ng-if="recentRoutes.length == 0" class="item">
+                <span>No recent routes</span>
+            </a>
+        </div>
+        <div>
+            <div class="item item-divider">Favorite Routes</div>
+            <a ng-repeat="routeSet in favoriteRouteSets" class="item item-icon-left">
+                <i class="icon ion-android-bus"></i>
+                <span class="item-note">Stop</span>
+                <h2>{{routeSet.join(', ')}}</h2>
+                <span class="item-note">{{routeSet[0].stop}}</span>
+                <span ng-if="routeSet.length==1">
+                    <p>{{routeSet[0].desc}}</p>
+                </span>
+                <span ng-if="routeSet.length>1">
+                    <p>Multiple routes</p>
+                </span>
+            </a>
+            <a ng-if="favoriteRouteSets.length == 0" class="item">
+                <span>No favorite routes</span>
+            </a>
+        </div>
     </ion-content>
 </ion-view>
-
-
-
-
-
-<!--
-<div class="bar bar-header bar-assertive">
-    <h1 class="title">Bus Hopper</h1>
-    <button class="button icon ion-gear-a button-clear"></button>
-</div>
-<ion-content class="has-header padding">
-    <div class="button" ui-sref="selectbus">Ding</div>
-</ion-content>
--->

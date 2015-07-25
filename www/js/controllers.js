@@ -4,11 +4,29 @@ angular.module('bushopper.controllers', [])
         $scope.data = {
             stopnum : ''
         };
+
         $scope.updateStop = function() {
             StopService.setStop($scope.data.stopNum);
             StopService.clearRouteInfo();
             Navigation.goSelectRoute();
         };
+
+        $scope.$on('$ionicView.beforeEnter', function() {
+            $scope.recentRoutes = StopService.getRecentRoutes();
+            $scope.favoriteRouteSets = StopService.getAllFavoriteRouteSets();
+            //$scope.favoriteRouteSets = [
+            //    [
+            //        new RouteInfo('87', 'baseline', '8903'),
+            //        new RouteInfo('140', 'hurdman', '8903')
+            //    ],
+            //    [
+            //        new RouteInfo('118', 'kanata', '5602')
+            //    ],
+            //    [
+            //        new RouteInfo('93', 'lincoln fields', '8888')
+            //    ]
+            //];
+        });
     })
 
     .controller('SelectBus', function ($scope, OC, StopService, Navigation, Alert) {
@@ -38,7 +56,9 @@ angular.module('bushopper.controllers', [])
         };
 
         $scope.selectRoute = function(num, dir) {
-            StopService.insertRouteInfo(num, dir);
+            var rInfo = new RouteInfo(num, dir, currStop);
+            StopService.addRecentRoutes(rInfo);
+            StopService.insertRouteInfo(rInfo);
             Navigation.goResults();
         };
 
@@ -69,6 +89,7 @@ angular.module('bushopper.controllers', [])
         $scope.stopTitle = '';
         $scope.routeTitle = '';
         $scope.availableTrips = [];
+        $scope.isRouteSetFavorite = false;
 
         $scope.updateContent = function() {
             Alert.displayLoading();
@@ -78,6 +99,8 @@ angular.module('bushopper.controllers', [])
                 OC.getBusInfo(currStop, currentRoutes[0].num)
                     .success(function(data, status, headers, config) {
                         $scope.availableTrips = OC.parseBusInfo(data, currentRoutes[0]);
+
+                        $scope.isRouteSetFavorite = StopService.isRouteSetFavorited(currentRoutes);
                         Alert.hideLoading();
                     })
                     .error(function(data, status, headers, config) {
@@ -90,6 +113,16 @@ angular.module('bushopper.controllers', [])
                 $scope.routeTitle = 'All Routes';
                 console.log("to be implemented");
                 Alert.hideLoading();
+            }
+        };
+
+        $scope.toggleFavoriteRouteSet = function() {
+            if($scope.isRouteSetFavorite) {
+                $scope.isRouteSetFavorite = false;
+                StopService.removeFavoriteRouteSet(currentRoutes);
+            } else {
+                $scope.isRouteSetFavorite = true;
+                StopService.addFavoriteRouteSet(currentRoutes);
             }
         };
 
