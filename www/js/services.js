@@ -2,9 +2,9 @@ angular.module('bushopper.services', [])
 
     .factory('StopService', function() {
 
-        var stop = {
-            num: '',
-            selectedRoutes: [], // 1D array of RouteInfo
+        var data = {
+            stopNum: '',
+            selectedRouteSet: [],
             favoriteRouteSets: [],  // 2D array of RouteInfo
             recentRouteSets: []     // 2D array of RouteInfo
         };
@@ -30,47 +30,46 @@ angular.module('bushopper.services', [])
         }
 
         return {
-            getStop: function() { return stop.num; },
-            setStop: function(n) { stop.num = n; },
+            getStop: function() { return data.stopNum; },
+            setStop: function(n) { data.stopNum = n; },
 
-            insertRouteInfo: function(rInfo) { stop.selectedRoutes.push(rInfo) },
-            setRouteInfo: function(routes) { stop.selectedRoutes = routes },
-            getRouteInfo: function() { return stop.selectedRoutes },
-            clearRouteInfo: function() { stop.selectedRoutes = [] },
+            setSelectedRouteSet: function(rs) { data.selectedRouteSet = rs },
+            getSelectedRouteSet: function() { return data.selectedRouteSet },
+            clearSelectedRouteSet: function() { data.selectedRouteSet = [] },
 
             addRecentRouteSet: function(rs) {
-                for (var i = 0; i < stop.recentRouteSets.length; i++) {
-                    if(isRouteSetEqual(rs, stop.recentRouteSets[i])) {
-                        stop.recentRouteSets.splice(i, 1);
+                for (var i = 0; i < data.recentRouteSets.length; i++) {
+                    if(isRouteSetEqual(rs, data.recentRouteSets[i])) {
+                        data.recentRouteSets.splice(i, 1);
                         break;
                     }
                 }
-                stop.recentRouteSets.push(rs);
-                while(stop.recentRouteSets.length > 5) {
-                    stop.recentRouteSets.shift();
+                data.recentRouteSets.push(rs);
+                while(data.recentRouteSets.length > 5) {
+                    data.recentRouteSets.shift();
                 }
             },
-            getAllRecentRouteSets: function() { return stop.recentRouteSets; },
+            getAllRecentRouteSets: function() { return data.recentRouteSets; },
 
             isRouteSetFavorited: function(rs) {
-                for (var i = 0; i < stop.favoriteRouteSets.length; i++) {
-                    if(isRouteSetEqual(rs, stop.favoriteRouteSets[i]))
+                for (var i = 0; i < data.favoriteRouteSets.length; i++) {
+                    if(isRouteSetEqual(rs, data.favoriteRouteSets[i]))
                         return true;
                 }
                 return false;
             },
             addFavoriteRouteSet: function(rs) {
-                stop.favoriteRouteSets.push(rs);
+                data.favoriteRouteSets.push(rs);
             },
             removeFavoriteRouteSet: function(rs) {
-                for (var i = 0; i < stop.favoriteRouteSets.length; i++) {
-                    if(isRouteSetEqual(rs, stop.favoriteRouteSets[i])) {
-                        stop.favoriteRouteSets.splice(i, 1);
+                for (var i = 0; i < data.favoriteRouteSets.length; i++) {
+                    if(isRouteSetEqual(rs, data.favoriteRouteSets[i])) {
+                        data.favoriteRouteSets.splice(i, 1);
                         break;
                     }
                 }
             },
-            getAllFavoriteRouteSets: function() { return stop.favoriteRouteSets; }
+            getAllFavoriteRouteSets: function() { return data.favoriteRouteSets; }
         };
     })
 
@@ -91,33 +90,36 @@ angular.module('bushopper.services', [])
                 function(stopNum) {
                     var requestUrl = '/api/GetRouteSummaryForStop';
                     var requestParams = ocParams.join("&") + "&stopNo=" + stopNum;
-                    console.log("Calling: " + requestUrl + "?" + requestParams);
+                    // console.log("Calling: " + requestUrl + "?" + requestParams);
                     return $http.post(requestUrl, requestParams);
                 },
             getBusInfo :
                 function(stopNum, busNum) {
                     var requestUrl = '/api/GetNextTripsForStop';
                     var requestParams = ocParams.join("&") + "&stopNo=" + stopNum + "&routeNo=" + busNum;
-                    console.log("Calling: " + requestUrl + "?" + requestParams);
+                    // console.log("Calling: " + requestUrl + "?" + requestParams);
                     return $http.post(requestUrl, requestParams);
                 },
             getAllBusInfo :
                 function(stopNum) {
                     var requestUrl = '/api/GetNextTripsForStopAllRoutes';
                     var requestParams = ocParams.join("&") + "&stopNo=" + stopNum;
-                    console.log("Calling: " + requestUrl + "?" + requestParams);
+                    // console.log("Calling: " + requestUrl + "?" + requestParams);
                     return $http.post(requestUrl, requestParams);
                 },
             parseStopInfo :
                 function(stopInfo) {
                     var buses = [];
-                    var stopRoutes = $($.parseXML(stopInfo)).find("Route");
+                    var xml = $($.parseXML(stopInfo));
+                    var stopRoutes = xml.find("Route");
+                    var stopNum = xml.find("StopNo").text();
 
                     for (var x = 0; x < stopRoutes.length; x++) {
                         buses.push(
                             new RouteInfo(
                                 $(stopRoutes[x]).find("RouteNo").text(),
-                                $(stopRoutes[x]).find("RouteHeading").text()
+                                $(stopRoutes[x]).find("RouteHeading").text(),
+                                stopNum
                             )
                         );
                     }
@@ -129,7 +131,6 @@ angular.module('bushopper.services', [])
 
                     if(stopRoutes.length == 0) {
                         console.log('no routes in stop');
-                        console.log(busInfo);
                     }
 
                     for (var x = 0; x < stopRoutes.length; x++) {
@@ -139,7 +140,6 @@ angular.module('bushopper.services', [])
 
                             if(availableTrips.length == 0) {
                                 console.log('no trips found');
-                                console.log(busInfo);
                             }
                             for (var y = 0; y < availableTrips.length; y++) {
                                 trips.push(

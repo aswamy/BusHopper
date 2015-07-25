@@ -1,24 +1,36 @@
 angular.module('bushopper.controllers', [])
 
-    .controller('DashCtrl', function ($scope, StopService, Navigation) {
+    .controller('DashCtrl', function ($scope, $ionicHistory, StopService, Navigation) {
         $scope.data = {
             stopnum : ''
         };
 
         $scope.updateStop = function() {
             StopService.setStop($scope.data.stopNum);
-            StopService.clearRouteInfo();
+            StopService.clearSelectedRouteSet();
             Navigation.goSelectRoute();
+        };
+
+        $scope.selectRouteSet = function(rs) {
+            // Add route set to history & pass it to result page
+            StopService.addRecentRouteSet(rs);
+            StopService.setSelectedRouteSet(rs);
+            StopService.setStop(rs[0].getRouteStop());
+
+            Navigation.goShowTrips();
         };
 
         $scope.$on('$ionicView.beforeEnter', function() {
             $scope.recentRouteSets = StopService.getAllRecentRouteSets().slice().reverse();
             $scope.favoriteRouteSets = StopService.getAllFavoriteRouteSets();
         });
+
+        $ionicHistory.nextViewOptions({
+            disableBack: true
+        });
     })
 
-    .controller('SelectRoutes', function ($scope, OC, StopService, Navigation, Alert) {
-
+    .controller('SelectRoutes', function ($scope, $ionicHistory, OC, StopService, Navigation, Alert) {
         var prevStop = '';
         var currStop = '';
 
@@ -43,25 +55,19 @@ angular.module('bushopper.controllers', [])
             ;
         };
 
-        $scope.selectRoute = function(num, dir) {
-            var rInfo = new RouteInfo(num, dir, currStop);
+        $scope.selectRoute = function(r) {
             var selectedRoutes = [];
-            selectedRoutes.push(rInfo);
+            selectedRoutes.push(r);
 
-            // Add route to history
+            // Add route set to history & pass it to result page
             StopService.addRecentRouteSet(selectedRoutes);
-            // Add route to be passed to result page
-            StopService.insertRouteInfo(rInfo);
+            StopService.setSelectedRouteSet(selectedRoutes);
+
             Navigation.goShowTrips();
         };
 
-        //$scope.selectAllRoutes = function() {
-        //    StopService.setRouteInfo($scope.availableRoutes);
-        //    Navigation.goShowTrips();
-        //};
-
         $scope.$on('$ionicView.beforeEnter', function() {
-            StopService.clearRouteInfo();
+            StopService.clearSelectedRouteSet();
             currStop = StopService.getStop();
 
             if (typeof currStop == 'undefined' || currStop == '') {
@@ -72,10 +78,13 @@ angular.module('bushopper.controllers', [])
                 $scope.updateContent();
             }
         });
+
+        $ionicHistory.nextViewOptions({
+            disableBack: true
+        });
     })
 
-    .controller('ShowTrips', function ($scope, OC, StopService, Navigation, Alert) {
-
+    .controller('ShowTrips', function ($scope, $ionicHistory, OC, StopService, Navigation, Alert) {
         var currentRoutes;
         var currStop = '';
 
@@ -120,7 +129,7 @@ angular.module('bushopper.controllers', [])
         };
 
         $scope.$on('$ionicView.beforeEnter', function() {
-            currentRoutes = StopService.getRouteInfo();
+            currentRoutes = StopService.getSelectedRouteSet();
             currStop = StopService.getStop();
 
             if (currentRoutes.length == 0 || typeof currStop == 'undefined' || currStop == '') {
@@ -129,6 +138,10 @@ angular.module('bushopper.controllers', [])
                 $scope.stopTitle = currStop;
                 $scope.updateContent();
             }
+        });
+
+        $ionicHistory.nextViewOptions({
+            disableBack: true
         });
     })
 ;

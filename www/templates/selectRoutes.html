@@ -13,7 +13,7 @@
             </a>
             <a ng-repeat="route in availableRoutes"
                class="item item-icon-left item-icon-right"
-               ng-click="selectRoute(route.getRouteNum(), route.getRouteDesc())" >
+               ng-click="selectRoute(route)" >
                 <i class="icon ion-android-bus"></i>
                 <h2>{{ route.getRouteNum() }}</h2>
                 <p>{{ route.getRouteDesc() }}</p>

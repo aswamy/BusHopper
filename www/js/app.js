@@ -43,4 +43,4 @@ angular.module('bushopper', ['ionic', 'bushopper.controllers', 'bushopper.servic
         ;
 
         $urlRouterProvider.otherwise('/dash');
-    });
+    })

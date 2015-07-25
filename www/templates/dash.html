@@ -28,7 +28,7 @@
         </div>
         <div class="list">
             <div class="item item-divider">Recent Routes</div>
-            <a ng-repeat="routeSet in recentRouteSets" class="item item-icon-left">
+            <a ng-repeat="routeSet in recentRouteSets" class="item item-icon-left" ng-click="selectRouteSet(routeSet)">
                 <i class="icon ion-android-bus"></i>
                 <span class="item-note">Stop</span>
                 <h2>{{routeSet.join(', ')}}</h2>
@@ -46,7 +46,7 @@
         </div>
         <div>
             <div class="item item-divider">Favorite Routes</div>
-            <a ng-repeat="routeSet in favoriteRouteSets" class="item item-icon-left">
+            <a ng-repeat="routeSet in favoriteRouteSets" class="item item-icon-left" ng-click="selectRouteSet(routeSet)">
                 <i class="icon ion-android-bus"></i>
                 <span class="item-note">Stop</span>
                 <h2>{{routeSet.join(', ')}}</h2>
