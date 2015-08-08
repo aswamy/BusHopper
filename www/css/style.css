@@ -8,3 +8,9 @@
     height: 80px;
     width: 80px;
 }
+.item-content {
+    padding-right: 16px !important;
+}
+.route-panel-btn {
+    float: right;
+}

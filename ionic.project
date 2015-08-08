@@ -3,8 +3,8 @@
     "app_id": "",
     "proxies": [
         {
-            "path": "/api",
-            "proxyUrl": "https://api.octranspo1.com/v1.2"
+          "path": "/api",
+          "proxyUrl": "https://api.octranspo1.com/v1.2"
         }
     ]
 }

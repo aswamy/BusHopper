@@ -5,6 +5,30 @@ angular.module('bushopper.controllers', [])
             stopnum : ''
         };
 
+        $scope.options = {
+            showReorderRecent : false,
+            showDeleteRecent : false,
+            showReorderFavorite : false,
+            showDeleteFavorite : false,
+            moveItem : function(item, list, fromIndex, toIndex) {
+                //Move the item in the array
+                list.splice(fromIndex, 1);
+                list.items.splice(toIndex, 0, item);
+            },
+            deleteRecentRoute : function(item) {
+                $scope.recentRouteSets = StopService.removeRecentRouteSet(item).slice().reverse();
+            },
+            deleteFavoriteRoute : function(item) {
+                $scope.favoriteRouteSets = StopService.removeFavoriteRouteSet(item).slice().reverse();
+            },
+            refreshOptions : function() {
+                this.showReorderFavorite = false;
+                this.showDeleteFavorite = false;
+                this.showReorderRecent = false;
+                this.showDeleteRecent = false;
+            }
+        };
+
         $scope.updateStop = function() {
             StopService.setStop($scope.data.stopNum);
             StopService.clearSelectedRouteSet();
@@ -23,6 +47,7 @@ angular.module('bushopper.controllers', [])
         $scope.$on('$ionicView.beforeEnter', function() {
             $scope.recentRouteSets = StopService.getAllRecentRouteSets().slice().reverse();
             $scope.favoriteRouteSets = StopService.getAllFavoriteRouteSets();
+            $scope.options.refreshOptions();
         });
 
         $ionicHistory.nextViewOptions({

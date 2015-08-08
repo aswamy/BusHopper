@@ -26,41 +26,61 @@
             <div class="col col-50"><button class="button button-full icon-left ion-android-compass button-assertive">Find Stops</button></div>
             <div class="col"></div>
         </div>
-        <div class="list">
-            <div class="item item-divider">Recent Routes</div>
-            <a ng-repeat="routeSet in recentRouteSets" class="item item-icon-left" ng-click="selectRouteSet(routeSet)">
+
+        <div class="item item-divider">
+            <span>
+                Recent Routes
+                <button ng-if="recentRouteSets.length > 0" ng-click="options.showDeleteRecent = !options.showDeleteRecent" class="button button-assertive button-small route-panel-btn">Delete</button>
+                <button ng-if="recentRouteSets.length > 0" ng-click="options.showReorderRecent = !options.showReorderRecent" class="button button-small route-panel-btn" style="margin-right: 5px">Rearrange</button>
+            </span>
+        </div>
+        <ion-list show-delete="options.showDeleteRecent" show-reorder="options.showReorderRecent">
+            <ion-item ng-repeat="routeSet in recentRouteSets" class="item item-icon-left" ng-click="selectRouteSet(routeSet)">
+                <ion-delete-button ng-click="options.deleteRecentRoute(routeSet)" class="ion-android-cancel"></ion-delete-button>
+                <ion-reorder-button class="ion-navicon"></ion-reorder-button>
                 <i class="icon ion-android-bus"></i>
-                <span class="item-note">Stop</span>
+                <span class="item-note" ng-if="!options.showReorderRecent && !options.showDeleteRecent">Stop</span>
                 <h2>{{routeSet.join(', ')}}</h2>
-                <span class="item-note">{{routeSet[0].stop}}</span>
+                <span class="item-note" ng-if="!options.showReorderRecent && !options.showDeleteRecent">{{routeSet[0].stop}}</span>
                 <span ng-if="routeSet.length==1">
                     <p>{{routeSet[0].desc}}</p>
                 </span>
                 <span ng-if="routeSet.length>1">
                     <p>Multiple routes</p>
                 </span>
-            </a>
+            </ion-item>
             <a ng-if="recentRouteSets.length == 0" class="item">
                 <span>No recent routes</span>
             </a>
+        </ion-list>
+
+        <br>
+
+        <div class="item item-divider">
+            <span>
+                Favorite Routes
+                <button ng-if="favoriteRouteSets.length > 0" ng-click="options.showDeleteFavorite = !options.showDeleteFavorite" class="button button-assertive button-small route-panel-btn">Delete</button>
+                <button ng-if="favoriteRouteSets.length > 0" ng-click="options.showReorderFavorite = !options.showReorderFavorite" class="button button-small route-panel-btn" style="margin-right: 5px">Rearrange</button>
+            </span>
         </div>
-        <div>
-            <div class="item item-divider">Favorite Routes</div>
-            <a ng-repeat="routeSet in favoriteRouteSets" class="item item-icon-left" ng-click="selectRouteSet(routeSet)">
+        <ion-list show-delete="options.showDeleteFavorite" show-reorder="options.showReorderFavorite">
+            <ion-item ng-repeat="routeSet in favoriteRouteSets" class="item item-icon-left" ng-click="selectRouteSet(routeSet)">
+                <ion-delete-button ng-click="options.deleteFavoriteRoute(routeSet)" class="ion-android-cancel"></ion-delete-button>
+                <ion-reorder-button class="ion-navicon" on-reorder="moveItem()"></ion-reorder-button>
                 <i class="icon ion-android-bus"></i>
-                <span class="item-note">Stop</span>
+                <span class="item-note" ng-if="!options.showReorderFavorite && !options.showDeleteFavorite">Stop</span>
                 <h2>{{routeSet.join(', ')}}</h2>
-                <span class="item-note">{{routeSet[0].stop}}</span>
+                <span class="item-note" ng-if="!options.showReorderFavorite && !options.showDeleteFavorite">{{routeSet[0].stop}}</span>
                 <span ng-if="routeSet.length==1">
                     <p>{{routeSet[0].desc}}</p>
                 </span>
                 <span ng-if="routeSet.length>1">
                     <p>Multiple routes</p>
                 </span>
-            </a>
+            </ion-item>
             <a ng-if="favoriteRouteSets.length == 0" class="item">
                 <span>No favorite routes</span>
             </a>
-        </div>
+        </ion-list>
     </ion-content>
 </ion-view>
