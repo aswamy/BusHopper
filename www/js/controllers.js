@@ -10,16 +10,23 @@ angular.module('bushopper.controllers', [])
             showDeleteRecent : false,
             showReorderFavorite : false,
             showDeleteFavorite : false,
-            moveItem : function(item, list, fromIndex, toIndex) {
-                //Move the item in the array
-                list.splice(fromIndex, 1);
-                list.items.splice(toIndex, 0, item);
+            moveRecentRoute : function(item, fromIndex, toIndex) {
+                $scope.recentRouteSets.splice(fromIndex, 1);
+                $scope.recentRouteSets.splice(toIndex, 0, item);
+
+                StopService.setRecentRouteSets($scope.recentRouteSets.slice().reverse());
+            },
+            moveFavoriteRoute : function(item, fromIndex, toIndex) {
+                $scope.favoriteRouteSets.splice(fromIndex, 1);
+                $scope.favoriteRouteSets.splice(toIndex, 0, item);
+
+                StopService.setFavoriteRouteSets($scope.favoriteRouteSets);
             },
             deleteRecentRoute : function(item) {
                 $scope.recentRouteSets = StopService.removeRecentRouteSet(item).slice().reverse();
             },
             deleteFavoriteRoute : function(item) {
-                $scope.favoriteRouteSets = StopService.removeFavoriteRouteSet(item).slice().reverse();
+                $scope.favoriteRouteSets = StopService.removeFavoriteRouteSet(item);
             },
             refreshOptions : function() {
                 this.showReorderFavorite = false;

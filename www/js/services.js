@@ -91,7 +91,10 @@ angular.module('bushopper.services', [])
                 return data.recentRouteSets;
             },
             getAllRecentRouteSets: function() { return data.recentRouteSets; },
-            setRecentRouteSets: function(rss) { data.recentRouteSets = rss; },
+            setRecentRouteSets: function(rss) {
+                data.recentRouteSets = rss;
+                $localstorage.setObject('recentRouteSets', data.recentRouteSets);
+            },
 
             isRouteSetFavorited: function(rs) {
                 for (var i = 0; i < data.favoriteRouteSets.length; i++) {
@@ -115,7 +118,10 @@ angular.module('bushopper.services', [])
                 return data.favoriteRouteSets;
             },
             getAllFavoriteRouteSets: function() { return data.favoriteRouteSets; },
-            setFavoriteRouteSets: function(rss) { data.favoriteRouteSets = rss; }
+            setFavoriteRouteSets: function(rss) {
+                data.favoriteRouteSets = rss;
+                $localstorage.setObject('favoriteRouteSets', data.favoriteRouteSets);
+            }
         };
     })
 
