@@ -19,3 +19,14 @@
     width: 100%;
     z-index: 30;
 }
+.search-suggestions-panel .item {
+    background-color: #FBFBFB;
+}
+
+.search-suggestions-panel .item.item-divider {
+    text-align: center;
+    background-color: #eee;
+    border-radius: 0px 0px 20px 20px;
+    min-height: 15px;
+    height: 15px;
+}

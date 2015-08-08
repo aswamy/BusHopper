@@ -1,24 +1,33 @@
 angular.module('bushopper.controllers', [])
 
     .controller('DashCtrl', function ($scope, $ionicHistory, StopService, Navigation) {
-        $scope.data = {
+        $scope.search = {
             stopNum : '',
-            showSearchSuggestions : false
+            showSearchSuggestions : false,
+            refreshSearch : function() {
+                this.stopNum = '';
+                this.showSearchSuggestions = false;
+            },
+            searchStop : function() {
+                StopService.setStop(this.stopNum.split(" - ")[0]);
+                StopService.clearSelectedRouteSet();
+                Navigation.goSelectRoute();
+            },
+            searchChange : function() {
+                if(this.stopNum.length > 1) {
+                    this.showSearchSuggestions = true;
+                } else {
+                    this.showSearchSuggestions = false;
+                }
+            }
         };
-        $scope.melon = 'BRUYÈRE';
-        $scope.demoValues = allStopsArr;
+
+        $scope.allStops = allStopsArr;
 
         $scope.options = {
-            showReorderRecent : false,
             showDeleteRecent : false,
             showReorderFavorite : false,
             showDeleteFavorite : false,
-            moveRecentRoute : function(item, fromIndex, toIndex) {
-                $scope.recentRouteSets.splice(fromIndex, 1);
-                $scope.recentRouteSets.splice(toIndex, 0, item);
-
-                StopService.setRecentRouteSets($scope.recentRouteSets.slice().reverse());
-            },
             moveFavoriteRoute : function(item, fromIndex, toIndex) {
                 $scope.favoriteRouteSets.splice(fromIndex, 1);
                 $scope.favoriteRouteSets.splice(toIndex, 0, item);
@@ -34,15 +43,8 @@ angular.module('bushopper.controllers', [])
             refreshOptions : function() {
                 this.showReorderFavorite = false;
                 this.showDeleteFavorite = false;
-                this.showReorderRecent = false;
                 this.showDeleteRecent = false;
             }
-        };
-
-        $scope.updateStop = function() {
-            StopService.setStop($scope.data.stopNum);
-            StopService.clearSelectedRouteSet();
-            Navigation.goSelectRoute();
         };
 
         $scope.selectRouteSet = function(rs) {
@@ -58,6 +60,7 @@ angular.module('bushopper.controllers', [])
             $scope.recentRouteSets = StopService.getAllRecentRouteSets().slice().reverse();
             $scope.favoriteRouteSets = StopService.getAllFavoriteRouteSets();
             $scope.options.refreshOptions();
+            $scope.search.refreshSearch();
         });
 
         $ionicHistory.nextViewOptions({
