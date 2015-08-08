@@ -16,11 +16,17 @@
         <div>
             <div class="item item-input-inset">
                 <label class="item-input-wrapper">
-                    <input type="text" placeholder="Bus stop name/number" ng-model="data.stopNum">
+                    <input type="text" placeholder="Bus stop name/number" ng-focus="data.showSearchSuggestions = true" ng-model="data.stopNum">
                 </label>
                 <a class="button button-icon icon ion-ios-search" ng-click="updateStop()"></a>
+                <a class="button button-icon icon ion-android-close" ng-click="data.showSearchSuggestions = false"></a>
             </div>
         </div>
+
+        <ul ng-show="data.showSearchSuggestions" class="list search-suggestions-panel">
+            <li ng-repeat="val in demoValues" class="item">{{val}}</li>
+        </ul>
+
         <div class="row">
             <div class="col"></div>
             <div class="col col-50"><button class="button button-full icon-left ion-android-compass button-assertive">Find Stops</button></div>

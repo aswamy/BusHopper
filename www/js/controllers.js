@@ -2,8 +2,11 @@ angular.module('bushopper.controllers', [])
 
     .controller('DashCtrl', function ($scope, $ionicHistory, StopService, Navigation) {
         $scope.data = {
-            stopnum : ''
+            stopNum : '',
+            showSearchSuggestions : false
         };
+        $scope.melon = 'BRUYÈRE';
+        $scope.demoValues = allStopsArr;
 
         $scope.options = {
             showReorderRecent : false,

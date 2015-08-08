@@ -14,3 +14,8 @@
 .route-panel-btn {
     float: right;
 }
+.search-suggestions-panel {
+    position: absolute;
+    width: 100%;
+    z-index: 30;
+}
