@@ -8,17 +8,13 @@ angular.module('bushopper.controllers', [])
                 this.stopNum = '';
                 this.showSearchSuggestions = false;
             },
-            searchStop : function() {
-                StopService.setStop(this.stopNum.split(" - ")[0]);
+            searchStop : function(stop) {
+                StopService.setStop(stop.split(" - ")[0]);
                 StopService.clearSelectedRouteSet();
                 Navigation.goSelectRoute();
             },
             searchChange : function() {
-                if(this.stopNum.length > 1) {
-                    this.showSearchSuggestions = true;
-                } else {
-                    this.showSearchSuggestions = false;
-                }
+                this.showSearchSuggestions = this.stopNum.length > 1 ? true : false;
             }
         };
 

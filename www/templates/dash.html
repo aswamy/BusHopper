@@ -14,7 +14,7 @@
         </div>
 
         <ul ng-if="search.showSearchSuggestions" class="list search-suggestions-panel">
-            <li ng-repeat="val in allStops | filter: search.stopNum | limitTo:30" ng-click="search.searchStop()" class="item">{{val}}</li>
+            <li ng-repeat="val in allStops | filter: search.stopNum | limitTo:20" ng-click="search.searchStop(val)" class="item">{{val}}</li>
             <li class="item item-divider"></li>
         </ul>
 
