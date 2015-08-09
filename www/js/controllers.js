@@ -4,6 +4,7 @@ angular.module('bushopper.controllers', [])
         $scope.search = {
             stopNum : '',
             showSearchSuggestions : false,
+            focusSearch : false,
             refreshSearch : function() {
                 this.stopNum = '';
                 this.showSearchSuggestions = false;

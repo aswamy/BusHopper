@@ -19,10 +19,13 @@
     width: 100%;
     z-index: 30;
 }
+.search-suggestions-panel li {
+    position: relative;
+    z-index: 30;
+}
 .search-suggestions-panel .item {
     background-color: #FBFBFB;
 }
-
 .search-suggestions-panel .item.item-divider {
     text-align: center;
     background-color: #eee;
