@@ -8,6 +8,7 @@ angular.module('bushopper.controllers', [])
             refreshSearch : function() {
                 this.stopNum = '';
                 this.showSearchSuggestions = false;
+                this.focusSearch = false;
             },
             searchStop : function(stop) {
                 StopService.setStop(stop.split(" - ")[0]);
