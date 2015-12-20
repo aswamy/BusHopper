@@ -5,11 +5,15 @@
     </ion-header-bar>
     <ion-content has-bouncing="false" class="padding has-header">
         <div class="list card">
-            <a class="item item-icon-left item-icon-right item-divider"
+            <a class="item item-icon-left item-icon-right item-divider all-routes-title"
                ng-click="selectAllRoutes()">
+                <!--
                 <i class="icon ion-android-bus"></i>
                 <h2>Search All Routes</h2>
                 <i class="icon ion-chevron-right"></i>
+                -->
+                <i class="icon ion-android-map"></i>
+                <h2>Routes</h2>
             </a>
             <a ng-repeat="route in availableRoutes"
                class="item item-icon-left item-icon-right"

@@ -125,7 +125,7 @@ angular.module('bushopper.controllers', [])
         var currStop = '';
 
         $scope.stopTitle = '';
-        $scope.routeTitle = '';
+        //$scope.routeTitle = '';
         $scope.availableTrips = [];
         $scope.isRouteSetFavorite = false;
 
@@ -133,7 +133,7 @@ angular.module('bushopper.controllers', [])
             Alert.displayLoading();
 
             if(currentRoutes.length == 1) {
-                $scope.routeTitle = 'Route ' + currentRoutes[0].num;
+                //$scope.routeTitle = 'Route ' + currentRoutes[0].num;
                 OC.getBusInfo(currStop, currentRoutes[0].num)
                     .success(function(data, status, headers, config) {
                         $scope.availableTrips = OC.parseBusInfo(data, currentRoutes[0]);
@@ -148,7 +148,7 @@ angular.module('bushopper.controllers', [])
                     .then(function() {
                     })
             } else {
-                $scope.routeTitle = 'All Routes';
+                //$scope.routeTitle = 'All Routes';
                 console.log("to be implemented");
                 Alert.hideLoading();
             }

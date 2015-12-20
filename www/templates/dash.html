@@ -1,7 +1,8 @@
 <ion-view>
     <ion-header-bar class="bar bar-header bar-assertive">
+        <button class="button icon ion-social-rss button-clear" disabled></button>
         <h1 class="title">Bus Hopper</h1>
-        <button class="button icon ion-gear-a button-clear"></button>
+        <button class="button icon ion-gear-a button-clear" disabled></button>
     </ion-header-bar>
     <ion-content has-bouncing="false" class="padding has-header has-header">
         <div>
@@ -21,9 +22,38 @@
         <div ng-show="!search.focusSearch">
         <div class="row">
             <div class="col"></div>
-            <div class="col col-50"><button class="button button-full icon-left ion-android-compass button-assertive">Find Stops</button></div>
+            <div class="col col-50"><button disabled class="button button-full icon-left ion-android-compass button-assertive">Find Stops</button></div>
             <div class="col"></div>
         </div>
+
+        <div class="item item-divider">
+        <span>
+            Favorite Routes
+            <button ng-if="favoriteRouteSets.length > 0" ng-click="options.showDeleteFavorite = !options.showDeleteFavorite" class="button button-assertive button-small route-panel-btn">Delete</button>
+            <button ng-if="favoriteRouteSets.length > 0" ng-click="options.showReorderFavorite = !options.showReorderFavorite" class="button button-small route-panel-btn" style="margin-right: 5px">Reorder</button>
+        </span>
+        </div>
+        <ion-list show-delete="options.showDeleteFavorite" show-reorder="options.showReorderFavorite">
+            <ion-item ng-repeat="routeSet in favoriteRouteSets" class="item item-icon-left" ng-click="selectRouteSet(routeSet)">
+                <ion-delete-button ng-click="options.deleteFavoriteRoute(routeSet)" class="ion-android-cancel"></ion-delete-button>
+                <ion-reorder-button on-reorder="options.moveFavoriteRoute(routeSet, $fromIndex, $toIndex)" class="ion-navicon"></ion-reorder-button>
+                <i class="icon ion-android-bus"></i>
+                <span class="item-note" ng-if="!options.showReorderFavorite && !options.showDeleteFavorite">Stop</span>
+                <h2>{{routeSet.join(', ')}}</h2>
+                <span class="item-note" ng-if="!options.showReorderFavorite && !options.showDeleteFavorite">{{routeSet[0].stop}}</span>
+            <span ng-if="routeSet.length==1">
+                <p>{{routeSet[0].desc}}</p>
+            </span>
+            <span ng-if="routeSet.length>1">
+                <p>Multiple routes</p>
+            </span>
+            </ion-item>
+            <a ng-if="favoriteRouteSets.length == 0" class="item">
+                <span>No favorite routes</span>
+            </a>
+        </ion-list>
+
+        <br>
 
         <div class="item item-divider">
             <span>
@@ -47,35 +77,6 @@
             </ion-item>
             <a ng-if="recentRouteSets.length == 0" class="item">
                 <span>No recent routes</span>
-            </a>
-        </ion-list>
-
-        <br>
-
-        <div class="item item-divider">
-            <span>
-                Favorite Routes
-                <button ng-if="favoriteRouteSets.length > 0" ng-click="options.showDeleteFavorite = !options.showDeleteFavorite" class="button button-assertive button-small route-panel-btn">Delete</button>
-                <button ng-if="favoriteRouteSets.length > 0" ng-click="options.showReorderFavorite = !options.showReorderFavorite" class="button button-small route-panel-btn" style="margin-right: 5px">Reorder</button>
-            </span>
-        </div>
-        <ion-list show-delete="options.showDeleteFavorite" show-reorder="options.showReorderFavorite">
-            <ion-item ng-repeat="routeSet in favoriteRouteSets" class="item item-icon-left" ng-click="selectRouteSet(routeSet)">
-                <ion-delete-button ng-click="options.deleteFavoriteRoute(routeSet)" class="ion-android-cancel"></ion-delete-button>
-                <ion-reorder-button on-reorder="options.moveFavoriteRoute(routeSet, $fromIndex, $toIndex)" class="ion-navicon"></ion-reorder-button>
-                <i class="icon ion-android-bus"></i>
-                <span class="item-note" ng-if="!options.showReorderFavorite && !options.showDeleteFavorite">Stop</span>
-                <h2>{{routeSet.join(', ')}}</h2>
-                <span class="item-note" ng-if="!options.showReorderFavorite && !options.showDeleteFavorite">{{routeSet[0].stop}}</span>
-                <span ng-if="routeSet.length==1">
-                    <p>{{routeSet[0].desc}}</p>
-                </span>
-                <span ng-if="routeSet.length>1">
-                    <p>Multiple routes</p>
-                </span>
-            </ion-item>
-            <a ng-if="favoriteRouteSets.length == 0" class="item">
-                <span>No favorite routes</span>
             </a>
         </ion-list>
 

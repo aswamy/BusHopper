@@ -1,3 +1,6 @@
+.title {
+    text-align: center;
+}
 .loading {
     background-color: transparent !important;
 }
@@ -32,4 +35,8 @@
     border-radius: 0px 0px 20px 20px;
     min-height: 15px;
     height: 15px;
+}
+.all-routes-title {
+    padding-top: 16px;
+    padding-bottom: 16px;
 }
