@@ -1,6 +1,8 @@
-# BusHopper
+## BusHopper Overview ##
 
-GOALS:
+This is an public transportation app developed using Ionic for Android phones. It uses OC Transpo API to determine bus timings in the city of Ottawa.
+
+## Dev Goals ##
 
 1. main menu
 	- search by stop number or name
